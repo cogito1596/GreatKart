@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -21,6 +23,11 @@ class MyAccountManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
         )
+        try:
+            validate_password(password, user)
+        except ValidationError as e:
+            # Handle password validation errors
+            raise ValueError(f"Password validation error: {e}")
         user.set_password(password)
         user.save(using=self._db)
         return user
