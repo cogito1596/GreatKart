@@ -57,7 +57,7 @@ class Account(AbstractBaseUser):
 
     # non mandatory fields but good to have
     last_login = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)

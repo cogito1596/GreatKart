@@ -6,6 +6,7 @@
 <section class="section-content padding-y">
 
     <!-- ============================ COMPONENT REGISTER   ================================= -->
+    {% include "includes/alerts.html" %}
     <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
         <article class="card-body">
             <header class="mb-4">
@@ -56,7 +57,7 @@
 
     <p class="text-center mt-4">
         <span style="color: #333;">Have an account?</span>
-        <a href="" style="color: #000; font-weight: bold;">Log In</a>
+        <a href="{% url 'login' %}" style="color: #000; font-weight: bold;">Log In</a>
     </p>
 
     <br><br>
