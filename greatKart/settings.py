@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-r*^m$1-jn4!1oku77(lax24^s5j75w32mku*tychuncr(xg^#e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "accounts",
     "store",
     "carts",
+    "orders",
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 ROOT_URLCONF = "greatKart.urls"
 
 TEMPLATES = [

@@ -13,6 +13,10 @@ from django.contrib.auth.tokens import default_token_generator
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
+from carts.models import Cart, CartItem
+from carts.views import _cart_id
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
 
 # Create your views here.
 
@@ -66,16 +70,57 @@ def register(request):
 
 def login(request):
     if request.method == "POST":
-        email = request.POST["email"]
-        password = request.POST["password"]
-        user = auth.authenticate(email=email, password=password)
-        if user is not None:
+        # Log the user in
+        user = auth.authenticate(
+            username=request.POST["email"], password=request.POST["password"]
+        )
+        if user:
+            try:
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                if is_cart_item_exists:
+                    cart_items = CartItem.objects.filter(cart=cart)
+                    # for item in cart_items:
+                    #     item.user = user
+                    #     item.save()
+                    product_variations = []
+                    for item in cart_items:
+                        variations = item.variations.all()
+                        product_variations.append(list(variations))
+
+                    cart_items = CartItem.objects.filter(user=user)
+                    existing_variations_list = []
+                    id_list = []
+                    for item in cart_items:
+                        existing_variations = item.variations.all()
+                        existing_variations_list.append(list(existing_variations))
+                        id_list.append(item.id)
+                    for pr in product_variations:
+                        if pr in existing_variations_list:
+                            index = existing_variations_list.index(pr)
+                            item_id = id_list[index]
+                            item = CartItem.objects.get(id=item_id)
+                            item.quantity += 1
+                            item.user = user
+                            item.save()
+                        else:
+                            index = product_variations.index(pr)
+                            item_id = id_list[index]
+                            item = CartItem.objects.get(id=item_id)
+                            item.user = user
+                            item.save()
+
+            except Cart.DoesNotExist:
+                print("Cart does not exist")
+
             auth.login(request, user)
             messages.success(request, "You are now logged in")
+
             return redirect("home")
         else:
             messages.error(request, "Invalid login credentials")
             return redirect("login")
+
     return render(request, "accounts/login.html")
 
 

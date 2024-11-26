@@ -5,10 +5,10 @@
 <section class="section-content padding-y bg">
     <div class="container">
         {% if not cart_objects %}
-            <h2 class="text-center">Your cart is empty</h2>
-            <div class="text-center">
-                <a href="{% url 'store' %}" class="btn btn-dark">Continue Shopping</a>
-            </div>
+        <h2 class="text-center">Your cart is empty</h2>
+        <div class="text-center">
+            <a href="{% url 'store' %}" class="btn btn-dark">Continue Shopping</a>
+        </div>
         {% else %}
         <div class="row">
             <aside class="col-lg-9">
@@ -27,16 +27,19 @@
                             <tr>
                                 <td>
                                     <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="{{cart_object.product.images.url}}" class="img-sm"></div>
+                                        <div class="aside"><img src="{{cart_object.product.images.url}}" class="img-sm">
+                                        </div>
                                         <figcaption class="info">
-                                            <a href="{{cart_object.product.get_url}}" class="title text-dark">{{cart_object.product.product_name}}</a>
-                                            <p class="text-muted small">
-                                                {% if cart_object.variations.all %}
-                                                    {% for item in cart_object.variations.all %}
-                                                        {{item.variation_category | capfirst}} : {{item.variation_value | capfirst}}<br>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </p>
+                                            <a href="{{cart_object.product.get_url}}"
+                                                class="title text-dark">{{cart_object.product.product_name}}</a>
+                                                <p class="text-muted small">
+                                                    {% if cart_object.variations.all %}
+                                                        {% for item in cart_object.variations.all %}
+                                                            {{ item.variation_category|capfirst }} : {{ item.variation_value|capfirst }}<br>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </p>
+                                                
                                         </figcaption>
                                     </figure>
                                 </td>
@@ -45,23 +48,27 @@
                                     <div class="col">
                                         <div class="input-group input-spinner">
                                             <!-- Decrease Button Form -->
-                                            <form method="POST" action="{% url 'decrease_cart_item' cart_object.product.id %}">
+                                            <form method="POST"
+                                                action="{% url 'decrease_cart_item' cart_object.product.id %}">
                                                 {% csrf_token %}
                                                 {% for item in cart_object.variations.all %}
-                                                    <input type="hidden" name="{{item.variation_category}}" value="{{item.variation_value}}">
+                                                <input type="hidden" name="{{item.variation_category}}"
+                                                    value="{{item.variation_value}}">
                                                 {% endfor %}
                                                 <button type="submit" class="btn btn-light">
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </form>
-                                            
-                                            <input type="text" class="form-control" value="{{cart_object.quantity}}" readonly>
-                                            
+
+                                            <input type="text" class="form-control" value="{{cart_object.quantity}}"
+                                                readonly>
+
                                             <!-- Increase Button Form -->
                                             <form method="POST" action="{% url 'add_cart' cart_object.product.id %}">
                                                 {% csrf_token %}
                                                 {% for item in cart_object.variations.all %}
-                                                    <input type="hidden" name="{{item.variation_category}}" value="{{item.variation_value}}">
+                                                <input type="hidden" name="{{item.variation_category}}"
+                                                    value="{{item.variation_value}}">
                                                 {% endfor %}
                                                 <button type="submit" class="btn btn-light">
                                                     <i class="fa fa-plus"></i>
@@ -77,9 +84,10 @@
                                     </div>
                                 </td>
                                 <td class="text-right">
-                                    <a href="{% url 'remove-cart' cart_object.product.id cart_object.id %}" class="btn btn-danger">Remove</a>
+                                    <a href="{% url 'remove-cart' cart_object.product.id cart_object.id %}"
+                                        class="btn btn-danger">Remove</a>
 
-                                    
+
                                 </td>
                             </tr>
                             {% endfor %}
@@ -106,7 +114,7 @@
                         <p class="text-center mb-3">
                             <img src="{% static 'images/misc/payments.png' %}" height="26">
                         </p>
-                        <a href="" class="btn btn-dark btn-block"> Checkout </a>
+                        <a href="{% url 'checkout' %}" class="btn btn-dark btn-block"> Checkout </a>
                         <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
                     </div>
                 </div>

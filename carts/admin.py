@@ -8,7 +8,18 @@ class CartAdmin(admin.ModelAdmin):
 
 
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ["product", "cart", "quantity", "active"]
+    list_display = [
+        "product",
+        "cart",
+        "quantity",
+        "active",
+        "get_id",
+    ]
+
+    def get_id(self, obj):
+        return obj.id
+
+    get_id.short_description = "ID"
 
 
 admin.site.register(Cart, CartAdmin)
